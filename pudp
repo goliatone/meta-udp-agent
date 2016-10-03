@@ -1,0 +1,19 @@
+#!/usr/bin/env python
+import socket, traceback, time
+
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+
+for i in range(1,2):
+    try:
+        s.sendto("request;11;/alive;hola peperone",('255.255.255.255', 1234))
+        message, address = s.recvfrom(1024)
+        print "Got data from", address,":",message
+        # Acknowledge it.
+        s.sendto("request;11;/alive;hola", address)
+        time.sleep(2)
+    except (KeyboardInterrupt, SystemExit):
+        raise
+    except:
+        traceback.print_exc()

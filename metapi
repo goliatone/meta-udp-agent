@@ -1,0 +1,72 @@
+#!/usr/bin/env python
+
+import platform
+import subprocess
+import os
+
+
+TEMPLATE = "uuid#{uuid}|serial#{serial}|temp#{temp}|mac_eth0#{mac_eth0}|mac_wlan0#{mac_wlan0}"
+
+def get_serial():
+  # Extract serial from cpuinfo file
+  cpuserial = "0000000000000000"
+  try:
+    f = open('/proc/cpuinfo','r')
+    for line in f:
+      if line[0:6]=='Serial':
+        cpuserial = line[10:26]
+    f.close()
+  except:
+    cpuserial = "ERROR000000000"
+
+  return cpuserial
+
+def get_mac(interface):
+    # Return the MAC address of interface
+    try:
+        str = open('/sys/class/net/' + interface + '/address').read()
+    except:
+        str = "00:00:00:00:00:00"
+    return str[0:17]
+
+def get_temp():
+    # Extract GPU temp
+    try:
+        temp = subprocess.check_output(['cat','/sys/class/thermal/thermal_zone0/temp'])
+        temp = float(temp)/1000
+    except:
+        temp = 0.0
+    temp = '{0:.2f}'.format(temp)
+    return temp
+
+def get_uuid():
+    from os.path import expanduser, join
+    uuid_path = join(expanduser("~"), ".uuid")
+    # Get UUID
+    try:
+        uuid = subprocess.check_output(['cat', uuid_path])
+    except:
+        uuid = '00000000-0000-0000-0000-000000000000'
+    return uuid.rstrip()
+
+def get_uptime():
+    from datetime import timedelta
+    with open('/proc/uptime', 'r') as f:
+        uptime_seconds = float(f.readline().split()[0])
+        uptime_string = str(timedelta(seconds = uptime_seconds))
+
+    print(uptime_string)
+
+def get_values():
+    values = {}
+    values['uuid'] = get_uuid()
+    values['serial'] = get_serial()
+    values['mac_eth0'] = get_mac('eth0')
+    values['mac_wlan0'] = get_mac('wlan0')
+    values['temp'] = get_temp()
+
+
+if __name__ == '__main__':
+
+    values = get_values()
+    print template.format(**values)
