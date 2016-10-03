@@ -36,9 +36,11 @@ sudo logrotate -f /etc/logrotate.conf
 
 
 TODO:
-- [ ] Store UUID in device in known place
-- [ ] Generate medata file which contains body to be sent on ping
+- [ ] Generate installation script
 
-
-
-uuid:B46A0A75-7611-4CFD-BEFD-69E878561BB4 serial:000000002b34537e
+- Download cudp
+- Download metapi
+- Create UUID
+- Create crontab
+- Create logs dir
+- Edit logrotate conf (sudo)
