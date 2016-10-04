@@ -64,9 +64,10 @@ def get_values():
     values['mac_eth0'] = get_mac('eth0')
     values['mac_wlan0'] = get_mac('wlan0')
     values['temp'] = get_temp()
+    return values
 
 
 if __name__ == '__main__':
-
+    template = TEMPLATE
     values = get_values()
     print template.format(**values)
