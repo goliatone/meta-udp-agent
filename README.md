@@ -1,5 +1,5 @@
 ```
-echo "B46A0A75-7611-4CFD-BEFD-69E878561BB4" > ~/.uuid
+echo -n "B46A0A75-7611-4CFD-BEFD-69E878561BB4" > ~/.uuid
 ```
 
 
